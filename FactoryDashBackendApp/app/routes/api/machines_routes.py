@@ -26,7 +26,7 @@ def get_machine_schedule():
         return abort(400)
 
     start_date = get_datetime_or_today(request.args, 'start_date')
-    end_date = get_datetime_or_today(request.args, 'end_date')
+    end_date = get_datetime_or_today(request.args, 'end_date', add_days=14)
 
     if workshop_id > 0:
         return service.get_workshop_schedule(workshop_id, start_date, end_date)

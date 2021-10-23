@@ -1,5 +1,5 @@
-from itertools import groupby
 from typing import List
+from collections import defaultdict
 from flask import json
 import app.models.machines.db_dto as db_models
 
@@ -9,8 +9,8 @@ class WorkShop:
         self.id = db_workshop.id
         self.name = db_workshop.name
 
-    @classmethod
-    def get_list_json(cls, lst):
+    @staticmethod
+    def get_list_json(lst):
         return json.dumps({
             'workshops': [item.__dict__ for item in lst]
         }, ensure_ascii=False)
@@ -21,37 +21,27 @@ class Machine:
         self.id = machine.id
         self.name = machine.name
 
-    @classmethod
-    def get_list_json(cls, lst):
+    @staticmethod
+    def get_list_json(lst):
         return json.dumps({
             'machines': [item.__dict__ for item in lst]
         }, ensure_ascii=False)
 
 
-class MachineStatus:
-    def __init__(self, machine_day: db_models.MachineDay):
-        self.occupied_percentage = machine_day.occupied_percentage
-        self.unavailable_percentage = machine_day.unavailable_percentage
-        self.day = machine_day.day.strftime("%Y%m%d")
-
-
 class MachinesSchedule:
     def __init__(self, machine_days: List[db_models.MachineDay]):
-        self.machines = [MachinesSchedule.make_group_dict(machine_id, group)
-                         for machine_id, group in groupby(
-                machine_days, lambda x: x.machine_id)]
+        self.machine_states = defaultdict(list)
+        for state in machine_days:
+            self.machine_states[state.machine_name].append(
+                state.occupied_percentage)
+        self.days = sorted(set(map(lambda m_day: m_day.day, machine_days)))
 
     @staticmethod
-    def make_group_dict(machine_id, group):
-        group_list = [MachineStatus(machine_day).__dict__
-                      for machine_day in group]
-        return {
-            "machine_id": machine_id,
-            "statuses": group_list
-        }
-
-    @classmethod
-    def get_list_json(cls, schedule):
+    def get_list_json(schedule):
         return json.dumps({
-            "schedule": schedule.machines
-        })
+            'states': [{
+                'machine': machine_name,
+                'occupied': schedule.machine_states[machine_name]
+            } for machine_name in schedule.machine_states],
+            'days': [day.strftime("%d.%m.%Y") for day in schedule.days]
+        }, ensure_ascii=False)

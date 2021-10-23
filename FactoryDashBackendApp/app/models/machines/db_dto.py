@@ -16,10 +16,8 @@ class Machine:
 
 
 class MachineDay:
-    def __init__(self, day: datetime, day_index: int, occupied_percentage: float,
-                 unavailable_percentage: float, machine: Machine):
+    def __init__(self, day: datetime, machine_name: str,
+                 occupied_percentage: float):
         self.day = day
-        self.day_index = day_index
+        self.machine_name = machine_name
         self.occupied_percentage = occupied_percentage
-        self.unavailable_percentage = unavailable_percentage
-        self.machine_id = machine.id

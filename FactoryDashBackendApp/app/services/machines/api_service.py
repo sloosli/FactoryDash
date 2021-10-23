@@ -7,12 +7,6 @@ class Service:
     def __init__(self):
         self.db_service = DbService()
 
-    @staticmethod
-    def __convert_machine_days_to_json(machine_days, valid_checker):
-        filtered_machine_days = list(filter(valid_checker, machine_days))
-        machine_schedule = front_dto.MachinesSchedule(filtered_machine_days)
-        return front_dto.MachinesSchedule.get_list_json(machine_schedule)
-
     def get_workshops_json(self):
         db_workshops = self.db_service.get_all_workshops()
         front_workshops = [front_dto.WorkShop(workshop)
@@ -29,12 +23,12 @@ class Service:
                               start_date: datetime, end_date: datetime):
         db_machine_days = self.db_service.get_days_state_for_workshop(
             workshop_id, start_date, end_date)
-        machine_schedule = front_dto.MachinesSchedule(db_machine_days)
-        return front_dto.MachinesSchedule.get_list_json(machine_schedule)
+        machines_schedule = front_dto.MachinesSchedule(db_machine_days)
+        return front_dto.MachinesSchedule.get_list_json(machines_schedule)
 
     def get_machine_schedule(self, machine_id: int, start_date: datetime,
                              end_date: datetime):
         db_machine_days = self.db_service.get_days_state_for_machine(
             machine_id, start_date, end_date)
-        machine_schedule = front_dto.MachinesSchedule(db_machine_days)
-        return front_dto.MachinesSchedule.get_list_json(machine_schedule)
+        machines_schedule = front_dto.MachinesSchedule(db_machine_days)
+        return front_dto.MachinesSchedule.get_list_json(machines_schedule)

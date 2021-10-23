@@ -1,6 +1,6 @@
-from app.models import db_dto, front_dto
 from datetime import datetime
-from app.services.db_service import Service as DbService
+from app.models.machines import front_dto
+from app.services.machines.db_service import Service as DbService
 
 
 class Service:

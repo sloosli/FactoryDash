@@ -1,8 +1,8 @@
 import sys
 from app import create_app
-from app.models import db_dto, front_dto
-from app.services.db_service import Service as DbService
-from app.services.api_service import Service as ApiService
+from app.models.machines import db_dto, front_dto
+from app.services.machines.db_service import Service as DbService
+from app.services.machines.api_service import Service as ApiService
 
 app = create_app()
 

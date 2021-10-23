@@ -1,7 +1,7 @@
 from itertools import groupby
 from typing import List
 from flask import json
-import app.models.db_dto as db_models
+import app.models.machines.db_dto as db_models
 
 
 class WorkShop:

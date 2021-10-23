@@ -1,9 +1,8 @@
-from datetime import datetime
 from flask import Blueprint, abort, request
-from app.services.api_service import Service
+from app.services.machines.api_service import Service
 from app.utils import get_datetime_or_today
 
-api_bp = Blueprint('api', __name__)
+api_bp = Blueprint('machines_api', __name__)
 service = Service()
 
 

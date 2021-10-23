@@ -1,6 +1,6 @@
 from typing import List, Tuple
 import psycopg2
-from app.models.db_dto import *
+from app.models.machines.db_dto import *
 
 
 class Service:

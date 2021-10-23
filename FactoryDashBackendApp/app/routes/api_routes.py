@@ -4,7 +4,7 @@ from app.services.api_service import Service
 from app.utils import get_datetime_or_today
 
 api_bp = Blueprint('api', __name__)
-service = Service(True)
+service = Service()
 
 
 @api_bp.route('/workshops', methods=['GET'])

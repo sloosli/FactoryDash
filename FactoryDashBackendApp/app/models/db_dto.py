@@ -9,10 +9,10 @@ class WorkShop:
 
 
 class Machine:
-    def __init__(self, id_: int, name: str, workshop: WorkShop):
+    def __init__(self, id_: int, name: str, workshop_id: int):
         self.id = id_
         self.name = name
-        self.workshop_id = workshop.id
+        self.workshop_id = workshop_id
 
 
 class MachineDay:

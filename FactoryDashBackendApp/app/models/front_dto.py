@@ -32,21 +32,26 @@ class MachineStatus:
     def __init__(self, machine_day: db_models.MachineDay):
         self.occupied_percentage = machine_day.occupied_percentage
         self.unavailable_percentage = machine_day.unavailable_percentage
-        self.machine_id = machine_day.machine_id
+        self.day = machine_day.day.strftime("%Y%m%d")
 
 
-class MachineSchedule:
+class MachinesSchedule:
     def __init__(self, machine_days: List[db_models.MachineDay]):
-        self.days = {key.strftime("%Y%m%d"): [MachineStatus(value) for value in group]
-                     for key, group in groupby(machine_days, lambda x: x.day)}
+        self.machines = [MachinesSchedule.make_group_dict(machine_id, group)
+                         for machine_id, group in groupby(
+                machine_days, lambda x: x.machine_id)]
+
+    @staticmethod
+    def make_group_dict(machine_id, group):
+        group_list = [MachineStatus(machine_day).__dict__
+                      for machine_day in group]
+        return {
+            "machine_id": machine_id,
+            "statuses": group_list
+        }
 
     @classmethod
     def get_list_json(cls, schedule):
         return json.dumps({
-            "schedule": [
-                {
-                    "date": date,
-                    "machine_statuses": [status.__dict__ for status in schedule.days[date]]
-                } for date in schedule.days
-            ]
+            "schedule": schedule.machines
         })

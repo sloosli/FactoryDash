@@ -40,5 +40,4 @@ class KpiValue:
                 {"color": Colors.GOOD if self.is_higher else Colors.BAD,
                  "lowScore": max_medium,
                  "highScore": 100
-                 }
-                ]
+                 }]

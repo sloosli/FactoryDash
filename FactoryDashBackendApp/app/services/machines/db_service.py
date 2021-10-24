@@ -29,9 +29,9 @@ class Service(BaseDbService):
         request = "select ald.plan_for_day, res.res_name, " + \
                   "ald.occupied_percentage occ\n" + \
                   "from aggregates_loadup_det ald, resources res\n" + \
-                  f"where shop_id = {workshop_id}\n" + \
+                  f"where ald.shop_id = {workshop_id}\n" + \
                   "and ald.res_id = res.res_id\n" + \
-                  "and dt_plan = date ('07.10.2021')" \
+                  "and ald.dt_plan = date ('07.10.2021')" \
                   f"and plan_for_day >= date ('{start_date_str}')" \
                   f"and plan_for_day <= date ('{end_date_str}') \n" + \
                   "and duration_in_days = 1\n" + \

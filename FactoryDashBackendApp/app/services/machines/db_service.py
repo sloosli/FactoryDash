@@ -12,10 +12,10 @@ class Service(BaseDbService):
 
     def get_machines_in_workshop(self, workshop_id: int):
         workshop_id = int(workshop_id)
-        request = "select a.agregate_id, a.agregate_name, a.shop_id\n" + \
-                  "from aggregates a, shops s\n" + \
-                  "where a.shop_id = s.shop_id\n" + \
-                  f"and a.shop_id = {workshop_id};"
+
+        request = "select res_id, res_name, shop_id\n" + \
+                  "from resources r \n" + \
+                  f"where shop_id = {workshop_id};"
         raw_machines = self._execute_request(request)
         return Service._make_list_of(Machine, raw_machines)
 

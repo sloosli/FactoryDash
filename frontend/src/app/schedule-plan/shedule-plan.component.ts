@@ -4,6 +4,8 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import {SchedulePlanService} from "./schedule-plan.service";
 import {take} from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
+import {ColDef, GridOptions} from "ag-grid-community";
 
 @Component({
   selector: 'schedule-plan',
@@ -11,7 +13,81 @@ import {take} from "rxjs/operators";
   styleUrls: ['schedule-plan.component.scss']
 }) export class SchedulePlanComponent implements OnInit{
 
-  constructor(private readonly schedulePlaneService: SchedulePlanService) {}
+  constructor(private readonly schedulePlaneService: SchedulePlanService, private readonly http: HttpClient) {}
+
+  public isLoadMachines: boolean = false;
+
+  public gridOptions: GridOptions = {
+    defaultColDef: {
+      editable: false,
+      width: 110,
+    }
+  }
+
+  public columnDefs: ColDef[] = [
+    {
+      headerName: 'Агрегат',
+      field: 'machine',
+    },
+    {
+      headerName: '07.10.2021',
+      field: 'a',
+    },
+    {
+      headerName: '08.10.2021',
+      field: 'b',
+    },
+    {
+      headerName: '09.10.2021',
+      field: 'c',
+    },
+    {
+      headerName: '10.10.2021',
+      field: 'd',
+    },
+    {
+      headerName: '11.10.2021',
+      field: 'f',
+    },
+    {
+      headerName: '12.10.2021',
+      field: 'g',
+    },
+    {
+      headerName: '13.10.2021',
+      field: 'i',
+    },
+    {
+      headerName: '14.10.2021',
+      field: 'k',
+    },
+    {
+      headerName: '15.10.2021',
+      field: 'l',
+    },
+    {
+      headerName: '16.10.2021',
+      field: 'm',
+    },
+    {
+      headerName: '17.10.2021',
+      field: 'n',
+    },
+    {
+      headerName: '18.10.2021',
+      field: 'o',
+    },
+    {
+      headerName: '19.10.2021',
+      field: 'p',
+    },
+  ]
+
+  public rowData = [
+    { machine: 'АТП', a: 36, b: 10, c: 35, d: 99, e: 42, f: 100, g: 48, i: 26, k: 68, l: 82, m: 96, n: 100, o: 55, p: 100}
+  ];
+
+
 
   public ngOnInit(): void {
     this.schedulePlaneService.getSpeedCheck().pipe(take(1)).subscribe((props: any) => {
@@ -30,11 +106,44 @@ import {take} from "rxjs/operators";
           case 'Обязательный горячий посад, %':
             id = 'posad';
             break;
+          default:
+            id = 'machines';
+            break;
         }
         this.createSpeedCheck(id, chart);
       }
     });
 
+  }
+
+  public doTab(): void {
+    if (!this.isLoadMachines) {
+      this.http.get('http://192.168.50.50:5000/')
+    }
+    this.isLoadMachines = !this.isLoadMachines;
+    this.schedulePlaneService.getSpeedCheck().pipe(take(1)).subscribe((props: any) => {
+      let id: string = '';
+      for (let chart of props.kpi_indexes) {
+        switch (chart.name){
+          case 'Плановый OTIF':
+            id = 'otif';
+            break;
+          case 'Нарушение уровней запасов':
+            id = 'level';
+            break;
+          case 'Загрузка кампаний':
+            id = 'load';
+            break;
+          case 'Обязательный горячий посад, %':
+            id = 'posad';
+            break;
+          default:
+            id = 'machines';
+            break;
+        }
+        this.createSpeedCheck(id, chart);
+      }
+    });
   }
 
   private createSpeedCheck(id: string, props: any): void {

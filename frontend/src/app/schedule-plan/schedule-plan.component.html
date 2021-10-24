@@ -1,7 +1,7 @@
 <div class="subheader">
   <nav class="subheader__nav">
     <ul class="subheader__links">
-      <li class="subheader__link">Загрузка агрегатов</li>
+      <li class="subheader__link" (click)="doTab()">Загрузка агрегатов</li>
       <li class="subheader__link">Плановый OTIF</li>
       <li class="subheader__link">Уровни запасов</li>
       <li class="subheader__link">Загрузка кампаний</li>
@@ -9,23 +9,54 @@
     </ul>
   </nav>
 </div>
-<div>
+<div *ngIf="!isLoadMachines" class="content">
   <div class="scheduleChart-container">
-    <div>
+    <div class="chart">
       <p>Плановый OTIF</p>
       <div id="otif"></div>
     </div>
-    <div>
+    <div class="chart">
       <p>Уравни запасов</p>
       <div id="level"></div>
     </div>
-    <div>
+    <div class="chart">
       <p>Загрузка кампаний</p>
       <div id="load"></div>
     </div>
-    <div>
+    <div class="chart">
       <p>Обязательный горячий посад, %</p>
       <div id="posad"></div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoadMachines" class="content loadMachines">
+  <div class="sidebar">
+  <select>
+    <option>ЦТС</option>
+    <option>ЦДС</option>
+  </select>
+  <select *ngIf="true">
+    <option>АТП</option>
+    <option>АЗП-3 ЦТС</option>
+  </select>
+  <select *ngIf="false">
+    <option>Стан 1400 ЦДС</option>
+    <option>АНГЦ 2,4 ЦДС</option>
+  </select>
+  <input type="date">
+  <input type="date">
+  </div>
+  <div class="tabulars">
+    <div>
+      <div class="chart" id="machines"></div>
+      <ag-grid-angular
+        style="width: 880px; height: 250px;"
+        class="ag-theme-alpine"
+        [gridOptions]="gridOptions"
+        [columnDefs]="columnDefs"
+        [rowData]="rowData"
+      >
+      </ag-grid-angular>
     </div>
   </div>
 </div>
